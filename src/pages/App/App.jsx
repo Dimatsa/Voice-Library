@@ -1,5 +1,5 @@
 import React from "react";
-import styled from "styled-components";
+import styled, { createGlobalStyle } from "styled-components";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import Login from "../Login/Login";
 import Dashboard from "../Dashboard/Dashboard";
@@ -7,11 +7,22 @@ import ApiTest from "../ApiTest/ApiTest";
 
 const StyledAppDiv = styled.div`
   text-align: center;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-color: #333333;
+`;
+
+const GlobalStyle = createGlobalStyle`
+body {
+  margin: 0px;
+}
 `;
 
 export default () => {
   return (
     <>
+      <GlobalStyle />
       <StyledAppDiv>
         <Router>
           <Switch>
