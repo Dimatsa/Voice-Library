@@ -12,28 +12,35 @@ router.get("/message", function (req, res) {
 });
 
 router.get("/split-voices", (req, res) => {
-  var testVoice = "./server/counting.mp3";
-
-  function splitAudio() {}
-
-  ffmpeg.ffprobe(testVoice, (err, metaData) => {
-    //const { duration } = metaData.format;
-    //const { duration } = 2;
-    const startingTime = 2;
-    console.log(startingTime);
-    const clipDuration = 5;
-    ffmpeg()
-      .input("./server/counting.mp3")
-      .inputOptions([`-ss ${startingTime}`])
-      .outputOptions([`-t ${clipDuration}`])
-      .output("./endResult.mp3")
-      .on("end", () => console.log("done"))
-      .on("error", (err) => console.error(err))
-      .run();
-  });
-
-  res.send("hi");
+  splitVoices("./server/counting.mp3", [{ word: "hi", start: 2, end: 5 }]);
+  res.send("Hello");
 });
+
+function splitVoices(allVoiceFile, wordInfo) {
+  //Hard coded for testing purposes (allVoiceFile and wordInfo are hard coded)
+  allVoiceFile = "./server/counting.mp3";
+  wordInfo = [
+    { word: "bye", start: 2.5, end: 5.7 },
+    { word: "hi", start: 1.2, end: 2.44 },
+  ];
+
+  wordInfo.forEach((wordObj) => {
+    ffmpeg.ffprobe(allVoiceFile, (err, metaData) => {
+      outputFile = `./server/carlafile/${wordObj.word}.mp3`;
+      var startingTime = wordObj.start;
+      var clipDuration = wordObj.end - wordObj.start;
+      console.log(`Start: ${startingTime}, Duration: ${clipDuration}`);
+      ffmpeg()
+        .input(allVoiceFile)
+        .inputOptions([`-ss ${startingTime}`])
+        .outputOptions([`-t ${clipDuration}`])
+        .output(outputFile)
+        .on("end", () => console.log("done"))
+        .on("error", (err) => console.error(err))
+        .run();
+    });
+  });
+}
 
 /* Must be sent files to be merged in order */
 
