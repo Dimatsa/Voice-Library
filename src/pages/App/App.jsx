@@ -62,7 +62,16 @@ export default () => {
           <Router>
             <Switch>
               <Route path="/test">
-                <h2>{message}</h2>
+                <div>
+                  <form
+                    action="/api/uploadaudio"
+                    enctype="multipart/form-data"
+                    method="POST"
+                  >
+                    <input type="file" name="audio" accept="audio/*" />
+                    <input type="submit" value="Upload a file" />
+                  </form>
+                </div>
               </Route>
             </Switch>
           </Router>
