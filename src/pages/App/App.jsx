@@ -1,49 +1,39 @@
-import React, { useState, useEffect } from "react";
-import axios from "axios";
+import React from "react";
 import styled, { createGlobalStyle } from "styled-components";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import Login from "../Login/Login";
 import Dashboard from "../Dashboard/Dashboard";
+import ApiTest from "../ApiTest/ApiTest";
 
 const StyledAppDiv = styled.div`
   text-align: center;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-color: #333333;
+`;
+
+const GlobalStyle = createGlobalStyle`
+body {
+  margin: 0px;
+}
 `;
 
 export default () => {
-  const [message, setMessage] = useState("");
-
-  useEffect(
-    () =>
-      axios
-        .get("/api/message")
-        .then((response) => response.data)
-        .then((data) => setMessage(data)),
-    []
-  );
-
   return (
     <>
+      <GlobalStyle />
       <StyledAppDiv>
         <Router>
           <Switch>
             <Route exact path="/apitest">
-              <div>
-                <h2>{message}</h2>
-                <form
-                  action="/api/uploadaudio"
-                  enctype="multipart/form-data"
-                  method="POST"
-                >
-                  <input type="file" name="audio" accept="audio/*" />
-                  <input type="submit" value="Upload a file" />
-                </form>
-              </div>
+              <ApiTest />
             </Route>
             <Route exact path="/">
-              <Login></Login>
+              <Login />
             </Route>
             <Route exact path="/dashboard">
-              <Dashboard></Dashboard>
+              <Dashboard />
             </Route>
           </Switch>
         </Router>

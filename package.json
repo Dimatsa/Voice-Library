@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "@ffmpeg-installer/ffmpeg": "^1.0.20",
+    "@google-cloud/speech": "^4.2.0",
     "axios": "^0.21.1",
     "body-parse": "^0.1.0",
     "body-parser": "^1.19.0",

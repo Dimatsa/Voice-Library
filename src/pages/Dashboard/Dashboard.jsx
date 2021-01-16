@@ -1,13 +1,11 @@
-import React, { useState, useEffect } from "react";
-import axios from "axios";
-import styled, { createGlobalStyle } from "styled-components";
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import React from "react";
+import styled from "styled-components";
 
 const StyledAppDiv = styled.div`
   text-align: center;
 
   .App-header {
-    background-color: #6fcf97;
+    background-color: #222222;
     height: 386px;
     padding: 20px;
     color: #333333;
@@ -48,33 +46,52 @@ const StyledAppDiv = styled.div`
   input[type="text"] {
     padding: 0;
     height: 30px;
-    position: relative;
+    position: absolute;
     left: 0;
     outline: none;
     border: 1px solid #cdcdcd;
     border-color: rgba(0, 0, 0, 0.15);
     background-color: white;
-    font-size: 16px;
+    font-size: 12px;
+  }
+
+  .uploadButton {
+    position: absolute;
+    background-color: #787878;
+    align-items: center;
+  }
+
+  .playButton {
+    position: relative;
+    left: 50px;
+    background-color: #5cbbff;
   }
 
   .advancedSearchTextbox {
+    position: absolute;
+    top: 400px;
     width: 526px;
-    margin-right: -4px;
+    height: 100px;
   }
 `;
 
 export default () => {
-  const [message, setMessage] = useState("");
-
   return (
     <>
       <StyledAppDiv>
         <div className="App-header"></div>
-        <p className="App-intro">YouSpeak</p>
-        <p className="App-subtitle">YouSpeak so you don't have to</p>
-        <button>Upload Recording</button>
-        <button>Play Audio</button>
-        <input type="text" class="advancedSearchTextBox" />
+        <p className="App-intro">
+          <span className="test" style={{ color: "#e5e5e5" }}>
+            You
+          </span>
+          <span className="test" style={{ color: "#5CBBFF" }}>
+            Speak
+          </span>
+        </p>
+        <p className="App-subtitle">YouSpeak so you don&#39;t have to</p>
+        <button className="uploadButton">Upload Recording</button>
+        <input type="text" className="advancedSearchTextBox" />
+        <button className="playButton">Play Audio</button>
       </StyledAppDiv>
     </>
   );
