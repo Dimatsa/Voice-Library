@@ -1,84 +1,42 @@
-import React, { useState, useEffect } from "react";
-import logo from "./logo.svg";
-import axios from "axios";
+import React from "react";
 import styled, { createGlobalStyle } from "styled-components";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
-
-const GlobalStyle = createGlobalStyle`
-body {
-  margin: 0;
-  padding: 0;
-  font-family: 'sans-serif';
-}
-`;
+import Login from "../Login/Login";
+import Dashboard from "../Dashboard/Dashboard";
+import ApiTest from "../ApiTest/ApiTest";
 
 const StyledAppDiv = styled.div`
   text-align: center;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-color: #333333;
+`;
 
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-    height: 80px;
-  }
-
-  .App-header {
-    background-color: #222;
-    height: 150px;
-    padding: 20px;
-    color: white;
-  }
-
-  .App-intro {
-    font-size: large;
-  }
-
-  @keyframes App-logo-spin {
-    from {
-      transform: rotate(0deg);
-    }
-    to {
-      transform: rotate(360deg);
-    }
-  }
+const GlobalStyle = createGlobalStyle`
+body {
+  margin: 0px;
+}
 `;
 
 export default () => {
-  const [message, setMessage] = useState("");
-
-  useEffect(
-    () =>
-      axios
-        .get("/api/message")
-        .then((response) => response.data)
-        .then((data) => setMessage(data)),
-    []
-  );
-
   return (
     <>
       <GlobalStyle />
       <StyledAppDiv>
-        <div className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <Router>
-            <Switch>
-              <Route path="/test">
-                <div>
-                  <form
-                    action="/api/uploadaudio"
-                    enctype="multipart/form-data"
-                    method="POST"
-                  >
-                    <input type="file" name="audio" accept="audio/*" />
-                    <input type="submit" value="Upload a file" />
-                  </form>
-                </div>
-              </Route>
-            </Switch>
-          </Router>
-        </div>
-        <p className="App-intro">
-          To get started, edit <code>src/App.js</code> and save to reload.
-        </p>
+        <Router>
+          <Switch>
+            <Route exact path="/apitest">
+              <ApiTest />
+            </Route>
+            <Route exact path="/">
+              <Login />
+            </Route>
+            <Route exact path="/dashboard">
+              <Dashboard />
+            </Route>
+          </Switch>
+        </Router>
       </StyledAppDiv>
     </>
   );
