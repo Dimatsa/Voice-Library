@@ -4,6 +4,7 @@
 
 1. Ensure `node` and `npm` are installed
 1. `npm install`
+1. Install recommended VSCode plugins (if VSCode doesn't prompt you, find them in `.vscode/extensions.json`)
 
 ## Initial Google Cloud Setup
 
