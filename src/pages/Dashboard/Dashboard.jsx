@@ -1,7 +1,5 @@
-import React, { useState, useEffect } from "react";
-import axios from "axios";
-import styled, { createGlobalStyle } from "styled-components";
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import React from "react";
+import styled from "styled-components";
 
 const StyledAppDiv = styled.div`
   text-align: center;
@@ -64,17 +62,15 @@ const StyledAppDiv = styled.div`
 `;
 
 export default () => {
-  const [message, setMessage] = useState("");
-
   return (
     <>
       <StyledAppDiv>
         <div className="App-header"></div>
         <p className="App-intro">YouSpeak</p>
-        <p className="App-subtitle">YouSpeak so you don't have to</p>
+        <p className="App-subtitle">YouSpeak so you don&#39;t have to</p>
         <button>Upload Recording</button>
         <button>Play Audio</button>
-        <input type="text" class="advancedSearchTextBox" />
+        <input type="text" className="advancedSearchTextBox" />
       </StyledAppDiv>
     </>
   );

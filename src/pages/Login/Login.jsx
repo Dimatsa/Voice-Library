@@ -1,7 +1,5 @@
-import React, { useState, useEffect } from "react";
-import axios from "axios";
-import styled, { createGlobalStyle } from "styled-components";
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import React from "react";
+import styled from "styled-components";
 
 const StyledAppDiv = styled.div`
   text-align: center;
@@ -52,7 +50,7 @@ export default () => {
       <StyledAppDiv>
         <div className="Login-header"></div>
         <p className="Login-intro">YouSpeak</p>
-        <p className="Login-subtitle">YouSpeak so you don't have to</p>
+        <p className="Login-subtitle">YouSpeak so you don&#39;t have to</p>
         <button>Login</button>
       </StyledAppDiv>
     </>
