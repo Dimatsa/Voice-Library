@@ -7,9 +7,7 @@ const StyledButton = styled(Button)`
   background: #787878;
   background-color: #787878;
   color: white;
-  padding-left: 1em;
-  padding-right: 1em;
-  font-size: 2em;
+  font-size: 1em;
   font-family: "Raleway";
 
   :hover,

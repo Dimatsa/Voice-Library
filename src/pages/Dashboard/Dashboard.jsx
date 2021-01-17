@@ -3,14 +3,14 @@ import styled from "styled-components";
 import PlayButton from "../../components/PlayButton";
 import UploadButton from "../../components/UploadButton";
 import TopPanel from "./TopPanel";
+import Form from "react-bootstrap/Form";
 
 const StyledAppDiv = styled.div`
   text-align: center;
 
   .App-header {
     background-color: #222222;
-    height: 386px;
-    padding: 20px;
+    height: 30%;
     color: #333333;
   }
 
@@ -28,15 +28,13 @@ const StyledAppDiv = styled.div`
   }
 
   .advancedSearchTextbox {
-    top: 400px;
-    left: 20px;
-    width: 526px;
-    height: 200px;
+    width: 50%;
   }
 
   .something {
     justify-content: center;
-    width: 15%;
+    margin-top: 2.5em;
+    margin-bottom: 2em;
   }
 
   .something2 {
@@ -48,14 +46,25 @@ const StyledAppDiv = styled.div`
 
   .another-one {
     display: flex;
-    flex-direction: row;
+    justify-content: center;
+    text-align: top;
+  }
 
-    width: 2000px;
+  .span-div {
+  }
+
+  .little-div {
+  }
+
+  .form-control {
+    width: 50%;
+    resize: none;
   }
 `;
 
 const StyledPlayButton = styled(PlayButton)`
   height: 50%;
+  position: absolute;
 `;
 
 export default () => {
@@ -70,10 +79,14 @@ export default () => {
             <UploadButton />
           </div>
         </div>
-        <div className="another-one">
+        <Form className="another-one">
+          <Form.Control
+            as="textarea"
+            rows={3}
+            className="advancedSearchTextBox"
+          />
           <StyledPlayButton />
-          <input type="text" className="advancedSearchTextBox" />
-        </div>
+        </Form>
       </StyledAppDiv>
     </>
   );
