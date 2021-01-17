@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
-import PlayButton from "../../components/PlayButton";
-import UploadButton from "../../components/UploadButton";
+import PlayButton from "../../components/PlayButton/PlayButton";
+import UploadButton from "../../components/UploadButton/UploadButton";
 import TopPanel from "./TopPanel";
 import Form from "react-bootstrap/Form";
 
