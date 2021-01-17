@@ -5,6 +5,7 @@ import Login from "../Login/Login";
 import Dashboard from "../Dashboard/Dashboard";
 import ApiTest from "../ApiTest/ApiTest";
 import "bootstrap/dist/css/bootstrap.min.css";
+import Helmet from "react-helmet";
 
 const StyledAppDiv = styled.div`
   text-align: center;
@@ -24,6 +25,14 @@ export default () => {
   return (
     <>
       <GlobalStyle />
+      <Helmet>
+        <meta charSet="utf-8" />
+        <title>YouSpeak</title>
+        <link
+          rel="stylesheet"
+          href="https://fonts.googleapis.com/css2?family=Raleway"
+        />
+      </Helmet>
       <StyledAppDiv>
         <Router>
           <Switch>

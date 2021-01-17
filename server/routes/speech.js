@@ -3,21 +3,15 @@ const speech = require("@google-cloud/speech").v1p1beta1;
 const createTranscript = async (audioBuffer) => {
   const client = new speech.SpeechClient();
 
-  const model = "video";
-  const encoding = audioBuffer.format;
-  const sampleRateHertz = audioBuffer.frequency;
   const languageCode = "en-US";
 
   const config = {
-    encoding: encoding,
-    sampleRateHertz: sampleRateHertz,
     languageCode: languageCode,
-    model: model,
     useEnhanced: true,
   };
 
   const audio = {
-    content: audioBuffer.data.toString("base64"),
+    content: audioBuffer.toString("base64"),
   };
 
   const request = {

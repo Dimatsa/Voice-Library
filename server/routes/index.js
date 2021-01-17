@@ -2,6 +2,7 @@ var express = require("express");
 var router = express.Router();
 const fs = require("fs");
 const multer = require("multer");
+const createTranscript = require("./speech");
 
 const ffmpegPath = require("@ffmpeg-installer/ffmpeg").path;
 const ffmpeg = require("fluent-ffmpeg");
@@ -43,7 +44,6 @@ function splitVoices(allVoiceFile, wordInfo) {
 }
 
 /* Must be sent files to be merged in order */
-
 router.get("/combine-voices", (req, res) => {
   const testDir = "./server/ginafile/";
   var files = fs.readdirSync(testDir);
@@ -77,13 +77,20 @@ router.get("/combine-voices", (req, res) => {
 
 const upload = multer({ storage: multer.memoryStorage() });
 
-router.post("/uploadaudio", upload.single("audio"), function (req, res, next) {
+router.post("/uploadaudio", upload.single("audio"), async (req, res, next) => {
   const file = req.file;
   if (!file) {
     const error = new Error("Please upload a file");
     error.httpStatusCode = 400;
+
+    console.log(transcription);
+
     return next(error);
   }
+
+  const transcription = await createTranscript(file.buffer);
+  console.log(transcription);
+
   res.send(file);
 });
 
