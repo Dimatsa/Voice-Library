@@ -69,6 +69,14 @@ router.post("/uploadaudio", upload.single("audio"), async (req, res, next) => {
   const wordData = await createTranscript(file.buffer);
   fs.writeFile("tmpalldata.wav", file.buffer, () => {});
   splitVoices("./tmpalldata.wav", wordData);
+  combineAudio(
+    [
+      "./server/carlafile/3.wav",
+      "./server/carlafile/1.wav",
+      "./server/carlafile/5.wav",
+    ],
+    "./result.wav"
+  );
   res.send(wordData);
 });
 
