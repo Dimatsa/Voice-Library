@@ -19,6 +19,8 @@
 .env.development.local
 .env.test.local
 .env.production.local
+*.mp3
+*.wav
 
 npm-debug.log*
 yarn-debug.log*
