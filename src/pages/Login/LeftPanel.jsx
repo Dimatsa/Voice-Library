@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import LoginButton from "../../components/LoginButton/LoginButton";
 import LogoPanel from "./LogoPanel";
-import Form, { Group, Label, Control } from "react-bootstrap/Form";
+import Form from "react-bootstrap/Form";
 
 const StyledLeftPanel = styled.div`
   height: 100%;
@@ -20,10 +20,17 @@ const StyledLeftPanel = styled.div`
     background-color: #5e5d5d;
     border: none;
     width: 60%;
+    display: inline;
+    font-family: "Raleway";
+    border: 1px solid #000000;
 
-    :focus {
-      box-shadow: 0 0 0 0.2rem #5e5d5d40;
+    ::placeholder {
+      color: #cccccc;
     }
+  }
+
+  .login-group {
+    margin-top: 3em;
   }
 `;
 
@@ -32,7 +39,9 @@ export default () => {
     <StyledLeftPanel>
       <LogoPanel />
       <Form>
-        <p className="create-account-help">Create an account</p>
+        <Form.Label className="create-account-help">
+          Create an account
+        </Form.Label>
         <Form.Group>
           <Form.Control
             type="text"
@@ -47,7 +56,7 @@ export default () => {
             placeholder="Password"
           />
         </Form.Group>
-        <Form.Group>
+        <Form.Group className="login-group">
           <LoginButton />
         </Form.Group>
       </Form>
