@@ -15,7 +15,7 @@ router.get("/message", function (req, res) {
 
 // Testing
 router.get("/split-voices", (req, res) => {
-  splitVoices("/tmp/counting.wav", [
+  splitVoices("./server/counting.wav", [
     { word: "hi", startSecs: 2, endSecs: 5 },
     { word: "there", startSecs: 7, endSecs: 9 },
   ]);
@@ -26,7 +26,7 @@ router.get("/split-voices", (req, res) => {
 function splitVoices(allVoiceFile, wordInfo) {
   wordInfo.forEach((wordObj) => {
     ffmpeg.ffprobe(allVoiceFile, (err, metaData) => {
-      outputFile = `/tmp/carlafile/${wordObj.word}.wav`;
+      outputFile = `./server/carlafile/${wordObj.word}.wav`;
       var startingTime = wordObj.startSecs;
       var clipDuration = wordObj.endSecs - wordObj.startSecs;
       console.log(`Start: ${startingTime}, Duration: ${clipDuration}`);
@@ -42,17 +42,19 @@ function splitVoices(allVoiceFile, wordInfo) {
   });
 }
 
-router.get("/get-sentence", async (req, res) => {
+router.get("/get-sentence", (req, res) => {
   /* Change the thing below */
   console.log(req.query.words);
   filesToVoice = getSentence(req.query.words);
   console.log(filesToVoice);
-  await convertList(filesToVoice, "/tmp/fileTest2.mp3");
-  res.download("/tmp/fileTest2.mp3");
+  convertList(filesToVoice, "./server/fileTest2.mp3");
+  setTimeout(function () {
+    res.download("./server/fileTest2.mp3");
+  }, req.query.words.length * 200);
 });
 
 function getSentence(words) {
-  const testFolder = "/tmp/carlafile/";
+  const testFolder = "./server/carlafile/";
   var filesToVoice = [];
   var wordsPresent = [];
 
@@ -60,8 +62,6 @@ function getSentence(words) {
   files.forEach((file) => {
     wordsPresent.push(file);
   });
-
-  console.log(wordsPresent);
   words.forEach((word) => {
     let potentialFile = word + ".wav";
     if (wordsPresent.includes(potentialFile)) {
@@ -72,68 +72,49 @@ function getSentence(words) {
   return filesToVoice;
 }
 
-async function convertList(wordLinks, outputFile) {
+function convertList(wordLinks, outputFile) {
   var convertedList = [];
   var expectedNum = wordLinks.length;
   var currentNum = 0;
-  await Promise.all(
-    wordLinks.map(
-      (word) =>
-        new Promise((success, fail) => {
-          newWord = word.slice(0, -3) + "mp3";
-          convertedList.push(newWord);
-          console.log(convertedList);
-          ffmpeg(word)
-            .toFormat("mp3")
-            .on("error", (err) => {
-              console.log("An error occurred: " + err.message);
-              fail(err);
-            })
-            .on("progress", (progress) => {
-              console.log(
-                "Processing: " + progress.targetSize + " KB converted"
-              );
-            })
-            .on("end", () => {
-              currentNum += 1;
-              console.log("Processing finished ! " + currentNum.toString());
-              // bridge(currentNum, expectedNum, convertedList, outputFile);
-              success();
-            })
-            .save(newWord); //path where you want to save your file
-        })
-    )
-  );
-
-  console.log("COMBINING AUDIO");
-  await combineAudio(convertedList, outputFile);
+  console.log(wordLinks);
+  wordLinks.forEach((word) => {
+    newWord = word.slice(0, -3) + "mp3";
+    convertedList.push(newWord);
+    console.log(convertedList);
+    ffmpeg(word)
+      .toFormat("mp3")
+      .on("error", (err) => {
+        console.log("An error occurred: " + err.message);
+      })
+      .on("progress", (progress) => {
+        console.log("Processing: " + progress.targetSize + " KB converted");
+      })
+      .on("end", () => {
+        currentNum += 1;
+        console.log("Processing finished ! " + currentNum.toString());
+        bridge(currentNum, expectedNum, convertedList, outputFile);
+      })
+      .save(newWord); //path where you want to save your file
+  });
 }
 
 function bridge(current, final, convertList, outputFile) {
   console.log("Inside Bridge");
   if (current == final) {
     console.log("COMBINING AUDIO");
-    c;
+    combineAudio(convertList, outputFile);
   }
 }
 
 function combineAudio(wordLinks, outputFile) {
   console.log(`convertedList: ${wordLinks}\noutputFile: ${outputFile}`);
-  return new Promise((success, fail) =>
-    audioconcat(wordLinks)
-      .concat(outputFile)
-      .on("start", (command) => {
-        console.log("ffmpeg process started:", command);
-      })
-      .on("error", (error) => {
-        console.error("Failed to concatenate files", error);
-        fail(error);
-      })
-      .on("end", () => {
-        console.info("Generating audio prompts");
-        success();
-      })
-  );
+  audioconcat(wordLinks)
+    .concat(outputFile)
+    .on("start", (command) => {
+      console.log("ffmpeg process started:", command);
+    })
+    .on("error", (error) => console.error("Failed to concatenate files", error))
+    .on("end", () => console.info("Generating audio prompts"));
 }
 
 // TESTER
@@ -141,8 +122,8 @@ router.get("/combine-voices", (req, res) => {
   /* Change the thing below */
   console.log("COMBINE ENDPOINT");
   convertList(
-    ["/tmp/server/carlafile/hi.wav", "/tmp/carlafile/there.wav"],
-    "/tmp/server/fileTest1.mp3"
+    ["./server/carlafile/hi.wav", "./server/carlafile/there.wav"],
+    "./server/fileTest1.mp3"
   );
   /*
   combineAudio(
@@ -168,10 +149,8 @@ router.post("/uploadaudio", upload.single("audio"), async (req, res, next) => {
   }
 
   const wordData = await createTranscript(file.buffer);
-  fs.mkdirSync("/tmp/carlafile");
-  fs.writeFileSync("/tmp/tmpalldata.wav", file.buffer);
-  console.log("wrote tmpalldata.wav");
-  splitVoices("/tmp/tmpalldata.wav", wordData);
+  fs.writeFile("tmpalldata.wav", file.buffer, () => {});
+  splitVoices("./tmpalldata.wav", wordData);
 
   res.send("sucess");
 });
