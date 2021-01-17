@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import PlayButton from "../../components/PlayButton";
 import UploadButton from "../../components/UploadButton";
-import LogoPanel from "../Login/LogoPanel";
+import TopPanel from "./TopPanel";
 
 const StyledAppDiv = styled.div`
   text-align: center;
@@ -14,27 +14,11 @@ const StyledAppDiv = styled.div`
     color: #333333;
   }
 
-  .App-subtitle {
-    position: absolute;
-    text-align: center;
-    left: 5%;
-    top: 20%;
-
-    font-family: "Raleway";
-    font-style: normal;
-    font-weight: normal;
-    color: #efefef;
-    font-size: 24px;
-    line-height: 24px;
-    display: flex;
-    align-items: center;
-    text-align: center;
-  }
-
   input[type="text"] {
     top: 100px;
     padding: 0;
-    height: 50px;
+    height: 200px;
+    width: 500px;
     left: 20px;
     outline: none;
     border: 1px solid #cdcdcd;
@@ -51,19 +35,18 @@ const StyledAppDiv = styled.div`
   }
 
   .something {
-    position: absolute;
-    left: 50%;
-    top: 50%;
+    justify-content: center;
+    width: 15%;
+  }
+
+  .something2 {
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    width: 80px;
+    align-items: center;
+    width: 100%;
   }
 
   .another-one {
-    position: absolute;
-    top: 55%;
-    left: 20%;
     display: flex;
     flex-direction: row;
 
@@ -71,24 +54,25 @@ const StyledAppDiv = styled.div`
   }
 `;
 
+const StyledPlayButton = styled(PlayButton)`
+  height: 50%;
+`;
+
 export default () => {
   return (
     <>
       <StyledAppDiv>
         <div className="App-header">
-          <LogoPanel />
-          <span className="App-subtitle" style={{ alignSelf: "center" }}>
-            By uploading recordings of your voice, your words are saved to your
-            account so that they can be played back to you based on the words in
-            the text box.
-          </span>
+          <TopPanel />
         </div>
-        <div className="something">
-          <UploadButton />
-          <input type="text" className="advancedSearchTextBox" />
+        <div className="something2">
+          <div className="something">
+            <UploadButton />
+          </div>
         </div>
         <div className="another-one">
-          <PlayButton />
+          <StyledPlayButton />
+          <input type="text" className="advancedSearchTextBox" />
         </div>
       </StyledAppDiv>
     </>
