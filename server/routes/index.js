@@ -44,33 +44,19 @@ function splitVoices(allVoiceFile, wordInfo) {
   });
 }
 
-function combineAudio() {
-  const testDir = "./server/ginafile/";
-  var files = fs.readdirSync(testDir);
-  var voicesToMix = [];
-  var outputFile = "./server/ginafile/testResult.mp3";
-  files.forEach((file) => {
-    voicesToMix.push(testDir + file.toString());
-    console.log("File found!: " + file.toString());
-  });
-
-  console.log(voicesToMix);
-  voicesToMix = ["./server/ginafile/are.mp3", "./server/ginafile/doing.mp3"];
-  concat(voicesToMix)
-    .concat("./server/ginafile/anotherTestFile.mp3")
+function combineAudio(wordList, outputFile) {
+  concat(wordList)
+    .concat(outputFile)
     .on("error", (error) => console.error("Failed to concatenate files", error))
     .on("end", () => console.info("Generating audio prompts"));
-
-  /*
-  ffmpeg("./server/ginafile/actualResult.wav")
-    .on("error", (err) => console.log("error " + err))
-    .on("end", () => console.log("Finished combining audio files"))
-    .save("./server/ginafile/actualResult.wav");
-    */
 }
 
 router.get("/combine-voices", (req, res) => {
-  combineAudio();
+  /* Change the thing below */
+  combineAudio(
+    ["./server/ginafile/are.mp3", "./server/ginafile/you.mp3"],
+    "./server/ginafile/testResult.mp3"
+  );
   res.send("hi");
 });
 
