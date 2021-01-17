@@ -2,6 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import PlayButton from "../../components/PlayButton";
 import UploadButton from "../../components/UploadButton";
+import LogoPanel from "../Login/LogoPanel";
 
 const StyledAppDiv = styled.div`
   text-align: center;
@@ -13,30 +14,13 @@ const StyledAppDiv = styled.div`
     color: #333333;
   }
 
-  .App-intro {
-    position: absolute;
-    width: 824px;
-    height: 215px;
-    left: 33%;
-    top: 5%;
-
-    font-family: sans-serif;
-    font-style: normal;
-    font-weight: normal;
-    font-size: 144px;
-    line-height: 184px;
-    display: flex;
-    align-items: center;
-    text-align: center;
-  }
-
   .App-subtitle {
     position: absolute;
     text-align: center;
     left: 5%;
     top: 20%;
 
-    font-family: sans-serif;
+    font-family: "Raleway";
     font-style: normal;
     font-weight: normal;
     color: #efefef;
@@ -92,14 +76,7 @@ export default () => {
     <>
       <StyledAppDiv>
         <div className="App-header">
-          <p className="App-intro">
-            <span className="test" style={{ color: "#e5e5e5" }}>
-              You
-            </span>
-            <span className="test" style={{ color: "#5CBBFF" }}>
-              Speak
-            </span>
-          </p>
+          <LogoPanel />
           <span className="App-subtitle" style={{ alignSelf: "center" }}>
             By uploading recordings of your voice, your words are saved to your
             account so that they can be played back to you based on the words in
