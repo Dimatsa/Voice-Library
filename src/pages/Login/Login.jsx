@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import LoginButton from "../../components/LoginButton/LoginButton";
 
 const StyledAppDiv = styled.div`
   .Login-header {
@@ -82,7 +83,7 @@ export default () => {
         <p className="Login-intro">You</p>
         <p className="Login-intro2">Speak</p>
         <p className="Login-subtitle">YouSpeak, so you don&#39;t have to</p>
-        <button>Login</button>
+        <LoginButton />
       </StyledAppDiv>
     </>
   );
