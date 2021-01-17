@@ -107,6 +107,7 @@ export default () => {
             value={text}
             rows={3}
             className="advancedSearchTextBox"
+            placeholder="Enter some text..."
             onChange={(event) => setText(event.target.value)}
           />
           <StyledPlayButton disabled={asWords(text).length == 0} />
