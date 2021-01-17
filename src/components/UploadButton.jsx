@@ -4,8 +4,8 @@ import styled from "styled-components";
 import { useHistory } from "react-router-dom";
 
 const StyledButton = styled(Button)`
-  background: #00acf5;
-  background-color: #00acf5;
+  background: #787878;
+  background-color: #787878;
   color: white;
   padding-left: 1em;
   padding-right: 1em;
@@ -15,8 +15,8 @@ const StyledButton = styled(Button)`
   :hover,
   :focus,
   :active {
-    background: #00a2e7 !important;
-    background-color: #00a2e7 !important;
+    background: #787878 !important;
+    background-color: #787878 !important;
   }
 `;
 
@@ -27,7 +27,7 @@ export default () => {
 
   return (
     <StyledButton variant="primary" size="lg" onClick={onClick}>
-      Login
+      Upload Recording
     </StyledButton>
   );
 };

@@ -27,7 +27,7 @@ export default () => {
 
   return (
     <StyledButton variant="primary" size="lg" onClick={onClick}>
-      Login
+      Play Audio
     </StyledButton>
   );
 };
