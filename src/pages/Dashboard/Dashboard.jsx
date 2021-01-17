@@ -1,9 +1,10 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import PlayButton from "../../components/PlayButton/PlayButton";
 import UploadButton from "../../components/UploadButton/UploadButton";
 import TopPanel from "./TopPanel";
 import Form from "react-bootstrap/Form";
+import axios from "axios";
 
 const StyledAppDiv = styled.div`
   text-align: center;
@@ -68,6 +69,27 @@ const StyledPlayButton = styled(PlayButton)`
 `;
 
 export default () => {
+  const [text, setText] = useState("");
+  const [audio, setAudio] = useState("");
+
+  const asWords = (str) => str.split(/[. !?/,\n]+/).filter(Boolean);
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    axios
+      .get("/api/combine-voices", {
+        params: {
+          words: asWords(text),
+        },
+        responseType: "arraybuffer",
+      })
+      .then((audio) => {
+        // console.log(new Buffer.from(audio.data, "binary").toString("base64"));
+        setAudio(new Buffer.from(audio.data, "binary").toString("base64"));
+      });
+  };
+
   return (
     <>
       <StyledAppDiv>
@@ -79,14 +101,21 @@ export default () => {
             <UploadButton />
           </div>
         </div>
-        <Form className="another-one">
+        <Form onSubmit={handleSubmit} className="another-one">
           <Form.Control
             as="textarea"
+            value={text}
             rows={3}
             className="advancedSearchTextBox"
+            onChange={(event) => setText(event.target.value)}
           />
-          <StyledPlayButton />
+          <StyledPlayButton disabled={asWords(text).length == 0} />
         </Form>
+        {audio && (
+          <audio autoPlay>
+            <source src={`data:audio/mp3;base64,${audio}`} />
+          </audio>
+        )}
       </StyledAppDiv>
     </>
   );

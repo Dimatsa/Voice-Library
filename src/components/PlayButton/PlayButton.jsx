@@ -1,7 +1,7 @@
 import React from "react";
 import Button from "react-bootstrap/Button";
 import styled from "styled-components";
-import { useHistory } from "react-router-dom";
+import PropTypes from "prop-types";
 
 const StyledButton = styled(Button)`
   background: #00acf5;
@@ -20,14 +20,16 @@ const StyledButton = styled(Button)`
   }
 `;
 
-export default () => {
-  const history = useHistory();
-
-  const onClick = () => history.push("/dashboard");
-
+const PlayButton = ({ disabled }) => {
   return (
-    <StyledButton variant="primary" size="lg" onClick={onClick}>
+    <StyledButton disabled={disabled} variant="primary" type="submit" size="lg">
       Play Audio
     </StyledButton>
   );
 };
+
+PlayButton.propTypes = {
+  disabled: PropTypes.bool,
+};
+
+export default PlayButton;
