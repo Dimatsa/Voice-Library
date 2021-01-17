@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import styled, { createGlobalStyle } from "styled-components";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import Login from "../Login/Login";
@@ -22,14 +22,6 @@ body {
 `;
 
 export default () => {
-  useEffect(() => {
-    // Redirect workaround
-    if (window.location.hostname == "localhost") {
-      window.location.href =
-        "https://www.youspeak.space" + window.location.pathname;
-    }
-  }, []);
-
   return (
     <>
       <GlobalStyle />
