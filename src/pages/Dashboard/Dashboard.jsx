@@ -34,7 +34,7 @@ const StyledAppDiv = styled.div`
     position: absolute;
     text-align: center;
     left: 5%;
-    top: 20%
+    top: 20%;
 
     font-family: sans-serif;
     font-style: normal;
@@ -59,8 +59,6 @@ const StyledAppDiv = styled.div`
     font-size: 12px;
   }
 
-
-
   .advancedSearchTextbox {
     top: 400px;
     left: 20px;
@@ -84,7 +82,7 @@ const StyledAppDiv = styled.div`
     left: 20%;
     display: flex;
     flex-direction: row;
-    
+
     width: 2000px;
   }
 `;
