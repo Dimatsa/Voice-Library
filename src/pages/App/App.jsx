@@ -4,6 +4,7 @@ import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import Login from "../Login/Login";
 import Dashboard from "../Dashboard/Dashboard";
 import ApiTest from "../ApiTest/ApiTest";
+import "bootstrap/dist/css/bootstrap.min.css";
 
 const StyledAppDiv = styled.div`
   text-align: center;
