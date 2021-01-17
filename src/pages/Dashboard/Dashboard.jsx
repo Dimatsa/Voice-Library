@@ -1,5 +1,7 @@
 import React from "react";
 import styled from "styled-components";
+import PlayButton from "../../components/PlayButton";
+import UploadButton from "../../components/UploadButton";
 
 const StyledAppDiv = styled.div`
   text-align: center;
@@ -57,14 +59,7 @@ const StyledAppDiv = styled.div`
     font-size: 12px;
   }
 
-  .uploadButton {
-    background-color: #787878;
-    align-items: center;
-  }
 
-  .playButton {
-    background-color: #5cbbff;
-  }
 
   .advancedSearchTextbox {
     top: 400px;
@@ -90,7 +85,7 @@ const StyledAppDiv = styled.div`
     display: flex;
     flex-direction: row;
     
-    width: 1000px;
+    width: 2000px;
   }
 `;
 
@@ -114,11 +109,11 @@ export default () => {
           </span>
         </div>
         <div className="something">
-          <button className="uploadButton">Upload Recording</button>
+          <UploadButton />
           <input type="text" className="advancedSearchTextBox" />
         </div>
         <div className="another-one">
-          <button className="playButton">Play Audio</button>
+          <PlayButton />
         </div>
       </StyledAppDiv>
     </>
