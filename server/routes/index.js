@@ -4,7 +4,7 @@ const fs = require("fs");
 const multer = require("multer");
 const createTranscript = require("./speech");
 
-const concat = require("audioconcat");
+const audioconcat = require("audioconcat");
 const ffmpegPath = require("@ffmpeg-installer/ffmpeg").path;
 const ffmpeg = require("fluent-ffmpeg");
 ffmpeg.setFfmpegPath(ffmpegPath);
@@ -14,7 +14,10 @@ router.get("/message", function (req, res) {
 });
 
 router.get("/split-voices", (req, res) => {
-  splitVoices("./server/counting.wav", [{ word: "hi", start: 2, end: 5 }]);
+  splitVoices("./server/counting.wav", [
+    { word: "hi", startSecs: 2, endSecs: 5 },
+    { word: "there", startSecs: 7, endSecs: 9 },
+  ]);
   res.send("Hello");
 });
 
@@ -37,19 +40,90 @@ function splitVoices(allVoiceFile, wordInfo) {
   });
 }
 
-function combineAudio(wordList, outputFile) {
-  concat(wordList)
+router.get("/get-sentence", (req, res) => {
+  /* Change the thing below */
+  filesToVoice = getSentence([]);
+  convertList(filesToVoice, "./server/fileTest2.mp3");
+  res.send("getting sentence!");
+});
+
+function getSentence(words) {
+  const testFolder = "./server/carlafile/";
+  var filesToVoice = [];
+  var wordsPresent = [];
+  words = ["hi", "there"];
+
+  files = fs.readdirSync(testFolder);
+  files.forEach((file) => {
+    wordsPresent.push(file);
+  });
+  words.forEach((word) => {
+    let potentialFile = word + ".wav";
+    if (wordsPresent.includes(potentialFile)) {
+      filesToVoice.push(testFolder + potentialFile);
+    }
+  });
+  return filesToVoice;
+}
+
+function convertList(wordLinks, outputFile) {
+  var convertedList = [];
+  var expectedNum = wordLinks.length;
+  var currentNum = 0;
+  wordLinks.forEach((word) => {
+    newWord = word.slice(0, -3) + "mp3";
+    convertedList.push(newWord);
+    ffmpeg(word)
+      .toFormat("mp3")
+      .on("error", (err) => {
+        console.log("An error occurred: " + err.message);
+      })
+      .on("progress", (progress) => {
+        console.log("Processing: " + progress.targetSize + " KB converted");
+      })
+      .on("end", () => {
+        currentNum += 1;
+        fs.unlinkSync(word);
+        console.log("Processing finished ! " + currentNum.toString());
+        bridge(currentNum, expectedNum, convertedList, outputFile);
+      })
+      .save(newWord); //path where you want to save your file
+  });
+}
+
+function bridge(current, final, convertList, outputFile) {
+  console.log();
+  if (current == final) {
+    console.log("COMBINING AUDIO");
+    combineAudio(convertList, outputFile);
+  }
+}
+
+function combineAudio(wordLinks, outputFile) {
+  console.log(`convertedList: ${wordLinks}\noutputFile: ${outputFile}`);
+  audioconcat(wordLinks)
     .concat(outputFile)
+    .on("start", (command) => {
+      console.log("ffmpeg process started:", command);
+    })
     .on("error", (error) => console.error("Failed to concatenate files", error))
     .on("end", () => console.info("Generating audio prompts"));
 }
 
 router.get("/combine-voices", (req, res) => {
   /* Change the thing below */
-  combineAudio(
-    ["./server/ginafile/are.mp3", "./server/ginafile/you.mp3"],
-    "./server/ginafile/testResult.mp3"
+  console.log("COMBINE ENDPOINT");
+  convertList(
+    ["./server/carlafile/hi.wav", "./server/carlafile/there.wav"],
+    "./server/fileTest1.mp3"
   );
+  /*
+  combineAudio(
+    ["./server/carlafile/hi.wav", "./server/carlafile/there.wav"],
+    "./server/fileTest1.mp3"
+  );
+  */
+
   res.send("hi");
 });
 
