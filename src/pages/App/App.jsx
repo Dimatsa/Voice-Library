@@ -32,6 +32,10 @@ export default () => {
           rel="stylesheet"
           href="https://fonts.googleapis.com/css2?family=Raleway"
         />
+        <link
+          rel="stylesheet"
+          href="https://fonts.googleapis.com/css2?family=Rajdhani"
+        />
       </Helmet>
       <StyledAppDiv>
         <Router>

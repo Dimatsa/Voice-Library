@@ -1,90 +1,40 @@
 import React from "react";
 import styled from "styled-components";
-import LoginButton from "../../components/LoginButton/LoginButton";
+import LeftPanel from "./LeftPanel";
+import RightPanel from "./RightPanel";
 
-const StyledAppDiv = styled.div`
-  .Login-header {
-    background-color: #2f80ed;
-    float: right;
-    height: 1000px;
-    width: 1050px;
-    padding: 20px;
-    color: #333333;
+const StyledLogin = styled.div`
+  height: 100%;
+
+  .left,
+  .right {
+    float: left;
+    height: 100%;
   }
 
-  .button {
-    font-size: 13px;
-    margin-top: 800px;
-    color: #00acf5;
+  .left {
+    width: 40%;
   }
 
-  .Login-intro {
-    position: absolute;
-    width: 824px;
-    height: 215px;
-    left: 30px;
-    top: 0px;
-    color: #e5e5e5;
-
-    font-family: sans-serif;
-    font-style: normal;
-    font-weight: normal;
-    font-size: 144px;
-    line-height: 184px;
-    display: flex;
-    align-items: center;
-    text-align: center;
+  .right {
+    width: 60%;
   }
 
-  .Login-intro2 {
-    position: absolute;
-    width: 824px;
-    height: 215px;
-    left: 265px;
-    top: 0px;
-    color: #5cbbff;
-
-    font-family: sans-serif;
-    font-style: normal;
-    font-weight: normal;
-    font-size: 144px;
-    line-height: 184px;
-    display: flex;
-    align-items: center;
-    text-align: center;
-  }
-
-  .Login-subtitle {
-    /* YouSpeak, so you don’t have to. */
-
-    position: absolute;
-    width: 700px;
-    height: 112px;
-    left: 800px;
-    top: 296px;
-
-    font-family: Raleway;
-    font-style: sans-serif;
-    font-weight: 840;
-    font-size: 80px;
-    line-height: 80px;
-    display: flex;
-    align-items: left;
-
-    color: #ffffff;
+  /* Clear floats after the columns */
+  :after {
+    content: "";
+    display: table;
+    clear: both;
   }
 `;
 
-export default () => {
-  return (
-    <>
-      <StyledAppDiv>
-        <div className="Login-header"></div>
-        <p className="Login-intro">You</p>
-        <p className="Login-intro2">Speak</p>
-        <p className="Login-subtitle">YouSpeak, so you don&#39;t have to</p>
-        <LoginButton />
-      </StyledAppDiv>
-    </>
-  );
-};
+export default () => (
+  <StyledLogin>
+    <div className="left">
+      <LeftPanel />
+    </div>
+    <div className="right">
+      <RightPanel />
+    </div>
+  </StyledLogin>
+);
