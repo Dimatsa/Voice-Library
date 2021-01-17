@@ -7,9 +7,11 @@ const StyledButton = styled(Button)`
   background: #00acf5;
   background-color: #00acf5;
   color: white;
-  padding-left: 1em;
-  padding-right: 1em;
-  font-size: 4em;
+  padding-left: 3em;
+  padding-right: 3em;
+  padding-top: 0.5em;
+  padding-bottom: 0.5em;
+  font-size: 2em;
   font-family: "Raleway";
 
   :hover,
