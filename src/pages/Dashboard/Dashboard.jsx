@@ -44,9 +44,9 @@ const StyledAppDiv = styled.div`
   }
 
   input[type="text"] {
+    top: 100px;
     padding: 0;
-    height: 30px;
-    position: absolute;
+    height: 50px;
     left: 0;
     outline: none;
     border: 1px solid #cdcdcd;
@@ -56,22 +56,35 @@ const StyledAppDiv = styled.div`
   }
 
   .uploadButton {
-    position: absolute;
     background-color: #787878;
     align-items: center;
   }
 
   .playButton {
-    position: relative;
     left: 50px;
     background-color: #5cbbff;
   }
 
   .advancedSearchTextbox {
-    position: absolute;
     top: 400px;
     width: 526px;
-    height: 100px;
+    height: 200px;
+  }
+
+  .something {
+    position: absolute;
+    left: 500px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 100px;
+  }
+
+  .another-one {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    width: 1000px;
   }
 `;
 
@@ -89,9 +102,13 @@ export default () => {
           </span>
         </p>
         <p className="App-subtitle">YouSpeak so you don&#39;t have to</p>
-        <button className="uploadButton">Upload Recording</button>
-        <input type="text" className="advancedSearchTextBox" />
-        <button className="playButton">Play Audio</button>
+        <div className="something">
+          <button className="uploadButton">Upload Recording</button>
+          <div className="another-one">
+            <button className="playButton">Play Audio</button>
+            <input type="text" className="advancedSearchTextBox" />
+          </div>
+        </div>
       </StyledAppDiv>
     </>
   );
