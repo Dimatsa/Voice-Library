@@ -77,6 +77,7 @@ export default () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     e.stopPropagation();
+    setAudio("");
     axios
       .get("/api/get-sentence", {
         params: {
