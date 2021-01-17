@@ -50,7 +50,7 @@ router.get("/get-sentence", (req, res) => {
   convertList(filesToVoice, "./server/fileTest2.mp3");
   setTimeout(function () {
     res.download("./server/fileTest2.mp3");
-  }, 5000);
+  }, req.query.words.length * 200);
 });
 
 function getSentence(words) {
