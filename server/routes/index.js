@@ -13,23 +13,16 @@ router.get("/message", function (req, res) {
 });
 
 router.get("/split-voices", (req, res) => {
-  splitVoices("./server/counting.mp3", [{ word: "hi", start: 2, end: 5 }]);
+  splitVoices("./server/counting.wav", [{ word: "hi", start: 2, end: 5 }]);
   res.send("Hello");
 });
 
 function splitVoices(allVoiceFile, wordInfo) {
-  //Hard coded for testing purposes (allVoiceFile and wordInfo are hard coded)
-  allVoiceFile = "./server/counting.mp3";
-  wordInfo = [
-    { word: "bye", start: 2.5, end: 5.7 },
-    { word: "hi", start: 1.2, end: 2.44 },
-  ];
-
   wordInfo.forEach((wordObj) => {
     ffmpeg.ffprobe(allVoiceFile, (err, metaData) => {
-      outputFile = `./server/carlafile/${wordObj.word}.mp3`;
-      var startingTime = wordObj.start;
-      var clipDuration = wordObj.end - wordObj.start;
+      outputFile = `./server/carlafile/${wordObj.word}.wav`;
+      var startingTime = wordObj.startSecs;
+      var clipDuration = wordObj.endSecs - wordObj.startSecs;
       console.log(`Start: ${startingTime}, Duration: ${clipDuration}`);
       ffmpeg()
         .input(allVoiceFile)
@@ -88,10 +81,10 @@ router.post("/uploadaudio", upload.single("audio"), async (req, res, next) => {
     return next(error);
   }
 
-  const transcription = await createTranscript(file.buffer);
-  console.log(transcription);
-
-  res.send(file);
+  const wordData = await createTranscript(file.buffer);
+  fs.writeFile("tmpalldata.wav", file.buffer, () => {});
+  splitVoices("./tmpalldata.wav", wordData);
+  res.send(wordData);
 });
 
 module.exports = router;
