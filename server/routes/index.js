@@ -13,6 +13,7 @@ router.get("/message", function (req, res) {
   res.json("Welcome To React (backend)");
 });
 
+// Testing
 router.get("/split-voices", (req, res) => {
   splitVoices("./server/counting.wav", [
     { word: "hi", startSecs: 2, endSecs: 5 },
@@ -42,7 +43,7 @@ function splitVoices(allVoiceFile, wordInfo) {
 
 router.get("/get-sentence", (req, res) => {
   /* Change the thing below */
-  filesToVoice = getSentence([]);
+  filesToVoice = getSentence(req.query.words);
   convertList(filesToVoice, "./server/fileTest2.mp3");
   res.send("getting sentence!");
 });
@@ -51,11 +52,10 @@ function getSentence(words) {
   const testFolder = "./server/carlafile/";
   var filesToVoice = [];
   var wordsPresent = [];
-  words = ["hi", "there"];
 
   files = fs.readdirSync(testFolder);
   files.forEach((file) => {
-    wordsPresent.push(file);
+    if ("") wordsPresent.push(file);
   });
   words.forEach((word) => {
     let potentialFile = word + ".wav";
@@ -110,6 +110,7 @@ function combineAudio(wordLinks, outputFile) {
     .on("end", () => console.info("Generating audio prompts"));
 }
 
+// TESTER
 router.get("/combine-voices", (req, res) => {
   /* Change the thing below */
   console.log("COMBINE ENDPOINT");
@@ -143,15 +144,8 @@ router.post("/uploadaudio", upload.single("audio"), async (req, res, next) => {
   const wordData = await createTranscript(file.buffer);
   fs.writeFile("tmpalldata.wav", file.buffer, () => {});
   splitVoices("./tmpalldata.wav", wordData);
-  combineAudio(
-    [
-      "./server/carlafile/3.wav",
-      "./server/carlafile/1.wav",
-      "./server/carlafile/5.wav",
-    ],
-    "./result.wav"
-  );
-  res.send(wordData);
+
+  res.send("sucess");
 });
 
 module.exports = router;
