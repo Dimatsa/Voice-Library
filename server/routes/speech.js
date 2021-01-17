@@ -6,6 +6,7 @@ const createTranscript = async (audioBuffer) => {
   const languageCode = "en-US";
 
   const config = {
+    enableWordTimeOffsets: true,
     languageCode: languageCode,
     useEnhanced: true,
   };
@@ -21,10 +22,27 @@ const createTranscript = async (audioBuffer) => {
 
   // Detects speech in the audio file
   const [response] = await client.recognize(request);
-  const transcription = response.results
-    .map((result) => result.alternatives[0].transcript)
-    .join("\n");
-  return transcription;
+  // Collect only valid word data
+  let words = [];
+  response.results[0].alternatives[0].words.forEach((wordData) => {
+    const startSecs =
+      parseFloat(wordData.startTime.seconds) +
+      parseFloat(wordData.startTime.nanos / 1000000000);
+    const endSecs =
+      parseFloat(wordData.endTime.seconds) +
+      parseFloat(wordData.endTime.nanos / 1000000000);
+    const word = wordData.word;
+
+    const relevantWordData = {
+      word,
+      startSecs,
+      endSecs,
+    };
+
+    words.push(relevantWordData);
+  });
+
+  return words;
 };
 
 module.exports = createTranscript;
