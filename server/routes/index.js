@@ -19,6 +19,7 @@ router.get("/split-voices", (req, res) => {
     { word: "hi", startSecs: 2, endSecs: 5 },
     { word: "there", startSecs: 7, endSecs: 9 },
   ]);
+
   res.send("Hello");
 });
 
@@ -43,9 +44,13 @@ function splitVoices(allVoiceFile, wordInfo) {
 
 router.get("/get-sentence", (req, res) => {
   /* Change the thing below */
+  console.log(req.query.words);
   filesToVoice = getSentence(req.query.words);
+  console.log(filesToVoice);
   convertList(filesToVoice, "./server/fileTest2.mp3");
-  res.send("getting sentence!");
+  setTimeout(function () {
+    res.download("./server/fileTest2.mp3");
+  }, 5000);
 });
 
 function getSentence(words) {
@@ -55,7 +60,7 @@ function getSentence(words) {
 
   files = fs.readdirSync(testFolder);
   files.forEach((file) => {
-    if ("") wordsPresent.push(file);
+    wordsPresent.push(file);
   });
   words.forEach((word) => {
     let potentialFile = word + ".wav";
@@ -63,6 +68,7 @@ function getSentence(words) {
       filesToVoice.push(testFolder + potentialFile);
     }
   });
+  console.log(filesToVoice);
   return filesToVoice;
 }
 
@@ -70,9 +76,11 @@ function convertList(wordLinks, outputFile) {
   var convertedList = [];
   var expectedNum = wordLinks.length;
   var currentNum = 0;
+  console.log(wordLinks);
   wordLinks.forEach((word) => {
     newWord = word.slice(0, -3) + "mp3";
     convertedList.push(newWord);
+    console.log(convertedList);
     ffmpeg(word)
       .toFormat("mp3")
       .on("error", (err) => {
@@ -83,7 +91,6 @@ function convertList(wordLinks, outputFile) {
       })
       .on("end", () => {
         currentNum += 1;
-        fs.unlinkSync(word);
         console.log("Processing finished ! " + currentNum.toString());
         bridge(currentNum, expectedNum, convertedList, outputFile);
       })
@@ -92,7 +99,7 @@ function convertList(wordLinks, outputFile) {
 }
 
 function bridge(current, final, convertList, outputFile) {
-  console.log();
+  console.log("Inside Bridge");
   if (current == final) {
     console.log("COMBINING AUDIO");
     combineAudio(convertList, outputFile);
