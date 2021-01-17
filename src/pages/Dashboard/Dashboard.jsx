@@ -78,7 +78,7 @@ export default () => {
     e.preventDefault();
     e.stopPropagation();
     axios
-      .get("/api/combine-voices", {
+      .get("/api/get-sentence", {
         params: {
           words: asWords(text),
         },

@@ -50,9 +50,8 @@ export default () => {
         <LogoPanel />
       </div>
       <p className="dashboard-subtitle">
-        By uploading recordings of your voice, your words are saved to your
-        account so that they can be played back to you based on the words in the
-        text box.
+        By uploading more samples of your voice, you are increasing the
+        capabilities of your personal text-to-speech service.
       </p>
       <div className="horizontal-line-holder">
         <hr className="horizontal-line" />

@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import background from "./background.jpg";
 
 const StyledRightPanel = styled.div`
   .login-title {
@@ -31,6 +32,9 @@ const StyledRightPanel = styled.div`
 
   background-color: #2f80ed;
   height: 100%;
+  background-image: url(${background});
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
 `;
 
 export default () => {
@@ -39,8 +43,7 @@ export default () => {
       <div className="login-packed">
         <p className="login-title">Your words, our problem.</p>
         <p className="login-subtitle">
-          By recording your voice, you have the power of speech ready at your
-          fingertips.
+          A simple way to get realistic text-to-speech with your own voice.
         </p>
       </div>
     </StyledRightPanel>
