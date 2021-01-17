@@ -4,6 +4,7 @@ const fs = require("fs");
 const multer = require("multer");
 const createTranscript = require("./speech");
 
+const concat = require("audioconcat");
 const ffmpegPath = require("@ffmpeg-installer/ffmpeg").path;
 const ffmpeg = require("fluent-ffmpeg");
 ffmpeg.setFfmpegPath(ffmpegPath);
@@ -36,36 +37,34 @@ function splitVoices(allVoiceFile, wordInfo) {
   });
 }
 
-/* Must be sent files to be merged in order */
-router.get("/combine-voices", (req, res) => {
+function combineAudio() {
   const testDir = "./server/ginafile/";
   var files = fs.readdirSync(testDir);
   var voicesToMix = [];
-  //should be changed to however we are storing and displaying the stored voices
-  var combinedVoice = fs.createWriteStream(testDir + "testFile.mp3");
-  var readStream;
-  //The next few lines of code should be replaced by a function that takes data
-  //from data base and puts it in order of where it should be added
+  var outputFile = "./server/ginafile/testResult.mp3";
   files.forEach((file) => {
-    voicesToMix.push(file.toString());
+    voicesToMix.push(testDir + file.toString());
     console.log("File found!: " + file.toString());
   });
 
-  function combineFiles() {
-    if (voicesToMix.length == 0) {
-      combinedVoice.end("Done");
-      res.send(combinedVoice);
-      return;
-    }
-    var currentFile = testDir + voicesToMix.pop();
-    readStream = fs.createReadStream(currentFile);
-    readStream.pipe(combinedVoice, { end: false });
-    readStream.on("end", function () {
-      console.log(currentFile + " has been added");
-      combineFiles();
-    });
-  }
-  combineFiles();
+  console.log(voicesToMix);
+  voicesToMix = ["./server/ginafile/are.mp3", "./server/ginafile/doing.mp3"];
+  concat(voicesToMix)
+    .concat("./server/ginafile/anotherTestFile.mp3")
+    .on("error", (error) => console.error("Failed to concatenate files", error))
+    .on("end", () => console.info("Generating audio prompts"));
+
+  /*
+  ffmpeg("./server/ginafile/actualResult.wav")
+    .on("error", (err) => console.log("error " + err))
+    .on("end", () => console.log("Finished combining audio files"))
+    .save("./server/ginafile/actualResult.wav");
+    */
+}
+
+router.get("/combine-voices", (req, res) => {
+  combineAudio();
+  res.send("hi");
 });
 
 const upload = multer({ storage: multer.memoryStorage() });
