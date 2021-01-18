@@ -15,7 +15,7 @@ router.get("/message", function (req, res) {
 
 // Testing
 router.get("/split-voices", (req, res) => {
-  splitVoices("/tmp/counting.wav", [
+  splitVoices("./server/counting.wav", [
     { word: "hi", startSecs: 2, endSecs: 5 },
     { word: "there", startSecs: 7, endSecs: 9 },
   ]);
@@ -26,7 +26,7 @@ router.get("/split-voices", (req, res) => {
 function splitVoices(allVoiceFile, wordInfo) {
   wordInfo.forEach((wordObj) => {
     ffmpeg.ffprobe(allVoiceFile, (err, metaData) => {
-      outputFile = `/tmp/carlafile/${wordObj.word}.wav`;
+      outputFile = `./server/carlafile/${wordObj.word}.wav`;
       var startingTime = wordObj.startSecs;
       var clipDuration = wordObj.endSecs - wordObj.startSecs;
       console.log(`Start: ${startingTime}, Duration: ${clipDuration}`);
@@ -47,12 +47,12 @@ router.get("/get-sentence", async (req, res) => {
   console.log(req.query.words);
   filesToVoice = getSentence(req.query.words);
   console.log(filesToVoice);
-  await convertList(filesToVoice, "/tmp/fileTest2.mp3");
-  res.download("/tmp/fileTest2.mp3");
+  await convertList(filesToVoice, "./server/fileTest2.mp3");
+  res.download("./server/fileTest2.mp3");
 });
 
 function getSentence(words) {
-  const testFolder = "/tmp/carlafile/";
+  const testFolder = "./server/carlafile/";
   var filesToVoice = [];
   var wordsPresent = [];
 
@@ -141,8 +141,8 @@ router.get("/combine-voices", (req, res) => {
   /* Change the thing below */
   console.log("COMBINE ENDPOINT");
   convertList(
-    ["/tmp/server/carlafile/hi.wav", "/tmp/carlafile/there.wav"],
-    "/tmp/server/fileTest1.mp3"
+    ["./server/carlafile/hi.wav", "./server/carlafile/there.wav"],
+    "./server/fileTest1.mp3"
   );
   /*
   combineAudio(
@@ -168,10 +168,12 @@ router.post("/uploadaudio", upload.single("audio"), async (req, res, next) => {
   }
 
   const wordData = await createTranscript(file.buffer);
-  fs.mkdirSync("/tmp/carlafile");
-  fs.writeFileSync("/tmp/tmpalldata.wav", file.buffer);
+  if (!fs.existsSync("./server/carlafile")) {
+    fs.mkdirSync("./server/carlafile");
+  }
+  fs.writeFileSync("tmpalldata.wav", file.buffer);
   console.log("wrote tmpalldata.wav");
-  splitVoices("/tmp/tmpalldata.wav", wordData);
+  splitVoices("./tmpalldata.wav", wordData);
 
   res.send("sucess");
 });
