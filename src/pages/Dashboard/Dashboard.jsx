@@ -5,6 +5,7 @@ import UploadButton from "../../components/UploadButton/UploadButton";
 import TopPanel from "./TopPanel";
 import Form from "react-bootstrap/Form";
 import axios from "axios";
+import Alert from "react-bootstrap/Alert";
 
 const StyledAppDiv = styled.div`
   text-align: center;
@@ -61,6 +62,12 @@ const StyledAppDiv = styled.div`
     width: 50%;
     resize: none;
   }
+
+  .alert {
+    position: absolute;
+    top: 0;
+    width: 100%;
+  }
 `;
 
 const StyledPlayButton = styled(PlayButton)`
@@ -71,6 +78,7 @@ const StyledPlayButton = styled(PlayButton)`
 export default () => {
   const [text, setText] = useState("");
   const [audio, setAudio] = useState("");
+  const [showAlert, setShowAlert] = useState(true);
 
   const asWords = (str) => str.split(/[. !?/,\n]+/).filter(Boolean);
 
@@ -113,6 +121,21 @@ export default () => {
           />
           <StyledPlayButton disabled={asWords(text).length == 0} />
         </Form>
+        {showAlert && (
+          <Alert
+            className="alert"
+            variant="info"
+            dismissible
+            onClose={() => setShowAlert(false)}
+          >
+            <p>
+              Uploading recordings and playing audio are temporarily disabled.
+            </p>
+            <Alert.Link href="https://github.com/Dimatsa/HTN-2021">
+              Visit our GitHub for updates
+            </Alert.Link>
+          </Alert>
+        )}
         {audio && (
           <audio autoPlay>
             <source src={`data:audio/mp3;base64,${audio}`} />
