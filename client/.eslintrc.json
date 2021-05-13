@@ -20,5 +20,8 @@
     "plugin:react/recommended",
     "eslint:recommended",
     "plugin:prettier/recommended"
-  ]
+  ],
+  "rules": {
+    "react/display-name": "off"
+  }
 }
