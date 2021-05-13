@@ -42,15 +42,13 @@ function splitVoices(allVoiceFile, wordInfo) {
   });
 }
 
-router.get("/get-sentence", (req, res) => {
+router.get("/get-sentence", async (req, res) => {
   /* Change the thing below */
   console.log(req.query.words);
   filesToVoice = getSentence(req.query.words);
   console.log(filesToVoice);
-  convertList(filesToVoice, "./server/fileTest2.mp3");
-  setTimeout(function () {
-    res.download("./server/fileTest2.mp3");
-  }, req.query.words.length * 200);
+  await convertList(filesToVoice, "./server/fileTest2.mp3");
+  res.download("./server/fileTest2.mp3");
 });
 
 function getSentence(words) {
@@ -62,6 +60,8 @@ function getSentence(words) {
   files.forEach((file) => {
     wordsPresent.push(file);
   });
+
+  console.log(wordsPresent);
   words.forEach((word) => {
     let potentialFile = word + ".wav";
     if (wordsPresent.includes(potentialFile)) {
@@ -72,49 +72,68 @@ function getSentence(words) {
   return filesToVoice;
 }
 
-function convertList(wordLinks, outputFile) {
+async function convertList(wordLinks, outputFile) {
   var convertedList = [];
   var expectedNum = wordLinks.length;
   var currentNum = 0;
-  console.log(wordLinks);
-  wordLinks.forEach((word) => {
-    newWord = word.slice(0, -3) + "mp3";
-    convertedList.push(newWord);
-    console.log(convertedList);
-    ffmpeg(word)
-      .toFormat("mp3")
-      .on("error", (err) => {
-        console.log("An error occurred: " + err.message);
-      })
-      .on("progress", (progress) => {
-        console.log("Processing: " + progress.targetSize + " KB converted");
-      })
-      .on("end", () => {
-        currentNum += 1;
-        console.log("Processing finished ! " + currentNum.toString());
-        bridge(currentNum, expectedNum, convertedList, outputFile);
-      })
-      .save(newWord); //path where you want to save your file
-  });
+  await Promise.all(
+    wordLinks.map(
+      (word) =>
+        new Promise((success, fail) => {
+          newWord = word.slice(0, -3) + "mp3";
+          convertedList.push(newWord);
+          console.log(convertedList);
+          ffmpeg(word)
+            .toFormat("mp3")
+            .on("error", (err) => {
+              console.log("An error occurred: " + err.message);
+              fail(err);
+            })
+            .on("progress", (progress) => {
+              console.log(
+                "Processing: " + progress.targetSize + " KB converted"
+              );
+            })
+            .on("end", () => {
+              currentNum += 1;
+              console.log("Processing finished ! " + currentNum.toString());
+              // bridge(currentNum, expectedNum, convertedList, outputFile);
+              success();
+            })
+            .save(newWord); //path where you want to save your file
+        })
+    )
+  );
+
+  console.log("COMBINING AUDIO");
+  await combineAudio(convertedList, outputFile);
 }
 
 function bridge(current, final, convertList, outputFile) {
   console.log("Inside Bridge");
   if (current == final) {
     console.log("COMBINING AUDIO");
-    combineAudio(convertList, outputFile);
+    c;
   }
 }
 
 function combineAudio(wordLinks, outputFile) {
   console.log(`convertedList: ${wordLinks}\noutputFile: ${outputFile}`);
-  audioconcat(wordLinks)
-    .concat(outputFile)
-    .on("start", (command) => {
-      console.log("ffmpeg process started:", command);
-    })
-    .on("error", (error) => console.error("Failed to concatenate files", error))
-    .on("end", () => console.info("Generating audio prompts"));
+  return new Promise((success, fail) =>
+    audioconcat(wordLinks)
+      .concat(outputFile)
+      .on("start", (command) => {
+        console.log("ffmpeg process started:", command);
+      })
+      .on("error", (error) => {
+        console.error("Failed to concatenate files", error);
+        fail(error);
+      })
+      .on("end", () => {
+        console.info("Generating audio prompts");
+        success();
+      })
+  );
 }
 
 // TESTER
@@ -149,7 +168,11 @@ router.post("/uploadaudio", upload.single("audio"), async (req, res, next) => {
   }
 
   const wordData = await createTranscript(file.buffer);
-  fs.writeFile("tmpalldata.wav", file.buffer, () => {});
+  if (!fs.existsSync("./server/carlafile")) {
+    fs.mkdirSync("./server/carlafile");
+  }
+  fs.writeFileSync("tmpalldata.wav", file.buffer);
+  console.log("wrote tmpalldata.wav");
   splitVoices("./tmpalldata.wav", wordData);
 
   res.send("sucess");
