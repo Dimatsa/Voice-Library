@@ -6,5 +6,6 @@
   },
   "editor.codeActionsOnSave": {
     "source.fixAll": true
-  }
+  },
+  "eslint.workingDirectories": ["./client", "./server"]
 }

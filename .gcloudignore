@@ -1,0 +1,23 @@
+# Don't include because there are too many files
+**/*.mp3
+**/*.wav
+.git
+.vscode
+node_modules
+server/node_modules
+client/node_modules
+client/src
+server/src
+key.json
+client/public
+
+# Must be included
+!package-lock.json
+!package.json
+!app.yaml
+!client/package-lock.json
+!client/package.json
+!client/build/*
+!server/package-lock.json
+!server/package.json
+!server/dist/*
