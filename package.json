@@ -7,10 +7,11 @@
     "client": "cd client && npm start",
     "server": "cd server && npm start",
     "start": "concurrently \"npm run server\" \"npm run client\"",
-    "build": "(cd client && npm install && npm run build) && (cd server && npm install && npm run build)",
+    "build": "(cd client && npm run build) && (cd server && npm run build)",
     "postinstall": "(cd server && npm install) && (cd client && npm install)",
     "lint": "(cd server && npm run lint) && (cd client && npm run lint)",
-    "serve": "cd server && npm run serve"
+    "serve": "cd server && npm run serve",
+    "deploy": "gcloud app deploy"
   },
   "repository": {
     "type": "git",
@@ -24,8 +25,5 @@
   "homepage": "https://github.com/Dimatsa/Voice-Library#readme",
   "devDependencies": {
     "concurrently": "^6.1.0"
-  },
-  "dependencies": {
-    "base64-arraybuffer": "^0.2.0"
   }
 }

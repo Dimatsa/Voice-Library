@@ -1,5 +1,5 @@
 import path from "path";
-import express from "express";
+import express, { Router } from "express";
 import fs from "fs";
 import multer from "multer";
 import createTranscript, { WordInfo } from "./speech";
@@ -189,6 +189,9 @@ app.use("/api", router);
 
 // Have Node serve the files for our built React app
 app.use(express.static(path.resolve(__dirname, "../../client/build")));
+app.get("*", (_, res) =>
+  res.sendFile(path.resolve(__dirname, "../../client/build/index.html"))
+);
 
 app.listen(PORT, () => {
   console.log(`Server listening on ${PORT}`);

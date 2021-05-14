@@ -2,3 +2,5 @@
 node_modules/
 
 key.json
+**/*.wav
+**/*.mp3
