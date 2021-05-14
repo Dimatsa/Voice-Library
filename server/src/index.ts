@@ -10,14 +10,15 @@ ffmpeg.setFfmpegPath(ffmpegPath);
 const PORT = process.env.PORT || 3001;
 
 const app = express();
+const router = express.Router();
 
-app.get("/api/message", function (req, res) {
+router.get("/message", function (req, res) {
   res.json("Welcome To React (backend)");
 });
 
 // Testing
-app.get("/api/split-voices", (req, res) => {
-  splitVoices("./server/counting.wav", [
+router.get("/split-voices", (req, res) => {
+  splitVoices("./counting.wav", [
     { word: "hi", startSecs: 2, endSecs: 5 },
     { word: "there", startSecs: 7, endSecs: 9 },
   ]);
@@ -28,7 +29,7 @@ app.get("/api/split-voices", (req, res) => {
 function splitVoices(allVoiceFile: string, wordInfo: WordInfo[]) {
   wordInfo.forEach((wordObj) => {
     ffmpeg.ffprobe(allVoiceFile, (_err, _metaData) => {
-      const outputFile = `./server/carlafile/${wordObj.word}.wav`;
+      const outputFile = `./carlafile/${wordObj.word}.wav`;
       const startingTime = wordObj.startSecs;
       const clipDuration = wordObj.endSecs - wordObj.startSecs;
       console.log(`Start: ${startingTime}, Duration: ${clipDuration}`);
@@ -44,17 +45,17 @@ function splitVoices(allVoiceFile: string, wordInfo: WordInfo[]) {
   });
 }
 
-app.get("/api/get-sentence", async (req, res) => {
+router.get("/get-sentence", async (req, res) => {
   /* Change the thing below */
   console.log(req.query.words);
   const filesToVoice = getSentence(req.query.words as string[]);
   console.log(filesToVoice);
-  await convertList(filesToVoice, "./server/fileTest2.mp3");
-  res.download("./server/fileTest2.mp3");
+  await convertList(filesToVoice, "./fileTest2.mp3");
+  res.download("./fileTest2.mp3");
 });
 
 function getSentence(words: string[]) {
-  const testFolder = "./server/carlafile/";
+  const testFolder = "./carlafile/";
   const filesToVoice: string[] = [];
   const wordsPresent: string[] = [];
 
@@ -145,17 +146,17 @@ function combineAudio(wordLinks: string[], outputFile: string) {
 }
 
 // TESTER
-app.get("/api/combine-voices", (req, res) => {
+router.get("/combine-voices", (req, res) => {
   /* Change the thing below */
   console.log("COMBINE ENDPOINT");
   convertList(
-    ["./server/carlafile/hi.wav", "./server/carlafile/there.wav"],
-    "./server/fileTest1.mp3"
+    ["./carlafile/hi.wav", "./carlafile/there.wav"],
+    "./fileTest1.mp3"
   );
   /*
   combineAudio(
-    ["./server/carlafile/hi.wav", "./server/carlafile/there.wav"],
-    "./server/fileTest1.mp3"
+    ["./carlafile/hi.wav", "./carlafile/there.wav"],
+    "./fileTest1.mp3"
   );
   */
 
@@ -164,7 +165,7 @@ app.get("/api/combine-voices", (req, res) => {
 
 const upload = multer({ storage: multer.memoryStorage() });
 
-app.post("/api/uploadaudio", upload.single("audio"), async (req, res) => {
+router.post("/uploadaudio", upload.single("audio"), async (req, res) => {
   const file = req.file;
   if (!file) {
     res.status(400).send("Please upload a file");
@@ -174,8 +175,8 @@ app.post("/api/uploadaudio", upload.single("audio"), async (req, res) => {
   console.log("Upload audio");
 
   const wordData = await createTranscript(file.buffer);
-  if (!fs.existsSync("./server/carlafile")) {
-    fs.mkdirSync("./server/carlafile");
+  if (!fs.existsSync("./carlafile")) {
+    fs.mkdirSync("./carlafile");
   }
   fs.writeFileSync("tmpalldata.wav", file.buffer);
   console.log("wrote tmpalldata.wav");
@@ -183,6 +184,8 @@ app.post("/api/uploadaudio", upload.single("audio"), async (req, res) => {
 
   res.send("sucess");
 });
+
+app.use("/api", router);
 
 // Have Node serve the files for our built React app
 app.use(express.static(path.resolve(__dirname, "../../client/build")));

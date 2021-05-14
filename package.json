@@ -24,5 +24,8 @@
   "homepage": "https://github.com/Dimatsa/Voice-Library#readme",
   "devDependencies": {
     "concurrently": "^6.1.0"
+  },
+  "dependencies": {
+    "base64-arraybuffer": "^0.2.0"
   }
 }

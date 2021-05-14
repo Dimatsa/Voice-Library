@@ -6,7 +6,7 @@ import TopPanel from "./TopPanel";
 import Form from "react-bootstrap/Form";
 import axios from "axios";
 import Alert from "react-bootstrap/Alert";
-import Buffer from "buffer";
+import { encode } from "base64-arraybuffer";
 
 const StyledAppDiv = styled.div`
   text-align: center;
@@ -95,8 +95,7 @@ export default () => {
         responseType: "arraybuffer",
       })
       .then((audio) => {
-        // console.log(new Buffer.from(audio.data, "binary").toString("base64"));
-        setAudio(new Buffer.from(audio.data, "binary").toString("base64"));
+        setAudio(encode(audio.data));
       });
   };
 
