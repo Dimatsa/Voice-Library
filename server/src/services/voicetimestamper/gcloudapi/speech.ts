@@ -1,10 +1,5 @@
 import { v1p1beta1 as speech } from "@google-cloud/speech";
-
-export type WordInfo = {
-  word: string;
-  startSecs: number;
-  endSecs: number;
-};
+import { WordInfo } from "../ivoicetimestamper";
 
 export default async (audioBuffer: Buffer): Promise<WordInfo[]> => {
   const client = new speech.SpeechClient();

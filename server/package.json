@@ -3,12 +3,12 @@
   "version": "0.1.0",
   "private": true,
   "description": "Backend for voice-library",
-  "main": "dist/index.js",
+  "main": "dist/server.js",
   "scripts": {
-    "start": "concurrently \"tsc -w\" \"nodemon dist/index.js\"",
+    "start": "concurrently \"tsc -w\" \"nodemon dist/server.js\"",
     "build": "tsc",
     "lint": "npx eslint .",
-    "serve": "node dist/index.js"
+    "serve": "node dist/server.js"
   },
   "dependencies": {
     "@ffmpeg-installer/ffmpeg": "^1.0.20",
