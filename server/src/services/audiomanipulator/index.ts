@@ -1,4 +1,4 @@
-import User from "../../models/user";
+import User, { IUser } from "../../models/user";
 import { path as ffmpegPath } from "@ffmpeg-installer/ffmpeg";
 import ffmpeg from "fluent-ffmpeg";
 import { WordInfo } from "../voicetimestamper/ivoicetimestamper";
@@ -6,7 +6,7 @@ ffmpeg.setFfmpegPath(ffmpegPath);
 import fs from "fs";
 
 class AudioManipulatorService {
-  public async combineWords(user: User, wordList: string[]) {
+  public async combineWords(user: IUser, wordList: string[]) {
     const words = await user.findWordsByNames(wordList);
     const outputFile = "./fileTest2.mp3";
     console.log(`convertedList: ${words}\noutputFile: ${outputFile}`);
@@ -51,7 +51,7 @@ class AudioManipulatorService {
   }
 
   public async splitAudio(
-    user: User,
+    user: IUser,
     wordInfo: WordInfo[],
     audioBuffer: Buffer
   ) {
