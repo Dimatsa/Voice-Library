@@ -3,6 +3,14 @@ import Modal from "react-bootstrap/Modal";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import PropTypes from "prop-types";
+import styled from "styled-components";
+
+const StyledNotice = styled(Modal.Body)`
+  margin: 0px;
+  padding-top: 0px;
+  padding-bottom: 0px;
+  color: red;
+`;
 
 const UploadModal = ({ show, handleClose, handleSubmit }) => {
   const [path, setPath] = useState(null);
@@ -21,6 +29,10 @@ const UploadModal = ({ show, handleClose, handleSubmit }) => {
         <Modal.Header closeButton>
           <Modal.Title>Submit Audio</Modal.Title>
         </Modal.Header>
+        <StyledNotice>
+          <p>Warning: User accounts have not been implemented.</p>
+          <p>All uploads are publicly accessible</p>
+        </StyledNotice>
         <Modal.Body>
           <Form.Group>
             <Form.File
