@@ -3,9 +3,9 @@ import { port } from "./config";
 import database from "./database";
 
 database()
-  .then((db) =>
-    console.log('MongoDB connected to database "' + db.databaseName + '"')
-  )
+  .then((db) => {
+    console.log('MongoDB connected to database "' + db.databaseName + '"');
+  })
   .catch((err) => console.error(err));
 
 app.listen(port, () => {

@@ -1,19 +1,26 @@
 import mongoose from "mongoose";
-import { Binary } from "mongodb";
+import { ObjectId } from "mongodb";
 
 export interface IWord {
-  _id: string;
+  _id: ObjectId;
   word: string;
-  data: Binary;
+  data: Buffer;
 }
 
 export const WordSchema = new mongoose.Schema({
   word: {
     type: String,
+    required: true,
     index: true,
   },
 
-  data: Binary,
+  data: {
+    type: Buffer,
+    required: true,
+  },
 });
 
-export default mongoose.model<IWord & mongoose.Document>("Word", WordSchema);
+export const WordModel = mongoose.model<IWord & mongoose.Document>(
+  "Word",
+  WordSchema
+);

@@ -14,5 +14,8 @@ export default async function initialize(): Promise<Db> {
     useCreateIndex: true,
     useUnifiedTopology: true,
   });
+
+  mongoose.set("useFindAndModify", false);
+
   return connection.connection.db;
 }

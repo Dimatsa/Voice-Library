@@ -1,6 +1,6 @@
 import { Router } from "express";
 import multer from "multer";
-import User from "../../models/user";
+import { DefaultUser } from "../../models/user";
 import audioService from "../../services/audiomanipulator";
 import voiceService from "../../services/voicetimestamper";
 
@@ -18,7 +18,7 @@ router.post("/", upload.single("audio"), async (req, res) => {
 
   const wordData = await voiceService.getTimestamps(file.buffer);
 
-  audioService.splitAudio(new User("demo"), wordData, file.buffer);
+  audioService.splitAudio(await DefaultUser, wordData, file.buffer);
 
   res.send("sucess");
 });

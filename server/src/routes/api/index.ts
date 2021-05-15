@@ -7,8 +7,8 @@ import { NotFoundError } from "../../errors";
 const router = Router();
 
 router.use("/status", status);
-// router.use("/get-sentence", getsentence);
-// router.use("/uploadaudio", uploadaudio);
+router.use("/get-sentence", getsentence);
+router.use("/uploadaudio", uploadaudio);
 
 // API should produce a "not found" so it isn't handled by the client
 router.use((_req, _res, next: NextFunction) => next(new NotFoundError()));
