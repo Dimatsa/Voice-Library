@@ -1,4 +1,7 @@
 import path from "path";
+import { config } from "dotenv";
+
+config();
 
 export const node_environment = process.env.NODE_ENV;
 export const port = process.env.PORT || 3001;

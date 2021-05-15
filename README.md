@@ -10,6 +10,7 @@
 
 1. Install using these instructions: https://cloud.google.com/sdk/docs/quickstart
 1. Set `$GOOGLE_APPLICATION_CREDENTIALS` and run `gcloud auth login` and follow the instructions
+1. Set `$DATABASE_URL` to connect to the database
 1. `gcloud config set project [Project ID]`
 
 ## Running locally
