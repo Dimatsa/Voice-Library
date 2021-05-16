@@ -37,6 +37,16 @@ class AudioManipulatorService {
     }
 
     const words = queryResult.words;
+
+    // Put the words in the original order from the query
+    // It's unlikely that the list of words will be very long,
+    // so it should be fine if this is unoptimal
+    words.sort(
+      (a, b) =>
+        wordList.findIndex((word) => a.word === word) -
+        wordList.findIndex((word) => b.word === word)
+    );
+
     const outputFile = await this.tempFile(".mp3");
     console.log(`convertedList: ${words}\noutputFile: ${outputFile}`);
     const tempFiles = await Promise.all(words.map(this.wordToTempFile));
