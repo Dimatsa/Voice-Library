@@ -17,11 +17,11 @@ class AudioManipulatorService {
     );
   };
 
-  private wordToTempFile = async (word: IWord): Promise<string> => {
+  private wordToTempFile = async (word: IWord): Promise<[string, string]> => {
     const filePath = await this.tempFile(".mp3");
     console.log("Writing to: " + filePath);
     await fs.promises.writeFile(filePath, word.data);
-    return filePath;
+    return [word.word, filePath];
   };
 
   public async combineWords(user: IUser, wordList: string[]) {
@@ -36,23 +36,24 @@ class AudioManipulatorService {
       throw new BadRequestError();
     }
 
-    const words = queryResult.words;
+    const outputFile = await this.tempFile(".mp3");
 
-    // Put the words in the original order from the query
-    // It's unlikely that the list of words will be very long,
-    // so it should be fine if this is unoptimal
-    words.sort(
-      (a, b) =>
-        wordList.findIndex((word) => a.word === word) -
-        wordList.findIndex((word) => b.word === word)
+    // Query result is not necessarily in order, and will only contain each word once
+    const tempFileMap: Map<string, string> = new Map(
+      await Promise.all(queryResult.words.map(this.wordToTempFile))
     );
 
-    const outputFile = await this.tempFile(".mp3");
-    console.log(`convertedList: ${words}\noutputFile: ${outputFile}`);
-    const tempFiles = await Promise.all(words.map(this.wordToTempFile));
+    // Get the paths for each word in the original request
+    const orderedTempFiles: string[] = wordList
+      .filter((word) => tempFileMap.has(word))
+      .map((word) => tempFileMap.get(word)!);
+
+    const fileList = Array.from(tempFileMap.values());
+
+    console.log(`convertedList: ${fileList}\noutputFile: ${outputFile}`);
     await new Promise<void>((success, fail) =>
       ffmpeg()
-        .input("concat:" + tempFiles.join("|"))
+        .input("concat:" + orderedTempFiles.join("|"))
         .outputOptions("-acodec copy")
         .save(outputFile)
         .on("start", (command) => {
@@ -69,7 +70,7 @@ class AudioManipulatorService {
     );
 
     await Promise.all(
-      tempFiles.map(async (path) => await fs.promises.unlink(path))
+      fileList.map(async (path) => await fs.promises.unlink(path))
     );
 
     const result = await fs.promises.readFile(outputFile);
