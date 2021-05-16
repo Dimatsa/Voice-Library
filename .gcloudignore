@@ -21,3 +21,4 @@ client/public
 !server/package-lock.json
 !server/package.json
 !server/dist/*
+!server/.env

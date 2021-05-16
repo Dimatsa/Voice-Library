@@ -8,10 +8,6 @@ const app = express();
 // API requests
 app.use("/api", apiRouter);
 
-// Have Node serve the files for our built React app
-
-// express.static(path.resolve(__dirname, "../../client/build"))
-
 // Handle requests to client
 app.use(clientRouter);
 

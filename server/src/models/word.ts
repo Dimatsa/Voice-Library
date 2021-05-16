@@ -1,7 +1,26 @@
-export default class Word {
-  constructor(word: string, protected path: string) {}
+import mongoose from "mongoose";
+import { ObjectId } from "mongodb";
 
-  asTempFile() {
-    return this.path;
-  }
+export interface IWord {
+  _id: ObjectId;
+  word: string;
+  data: Buffer;
 }
+
+export const WordSchema = new mongoose.Schema({
+  word: {
+    type: String,
+    required: true,
+    index: true,
+  },
+
+  data: {
+    type: Buffer,
+    required: true,
+  },
+});
+
+export const WordModel = mongoose.model<IWord & mongoose.Document>(
+  "Word",
+  WordSchema
+);

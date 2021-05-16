@@ -1,31 +1,39 @@
-import Word from "./word";
-import { promises as fs } from "fs";
-import { save_folder } from "../config";
+import mongoose, { CallbackError, Schema } from "mongoose";
+import { ObjectId } from "mongodb";
+import { WordModel, IWord } from "./word";
 
-async function getSentence(words: string[]) {
-  const testFolder = save_folder;
-  const filesToVoice: Word[] = [];
-  const wordsPresent: string[] = [];
+// Make sure WordModel is registered
+typeof WordModel;
 
-  const files = await fs.readdir(testFolder);
-  files.forEach((file) => {
-    wordsPresent.push(file);
-  });
-
-  console.log(wordsPresent);
-  words.forEach((word) => {
-    const potentialFile = word + ".mp3";
-    if (wordsPresent.includes(potentialFile)) {
-      filesToVoice.push(new Word(word, testFolder + "/" + potentialFile));
-    }
-  });
-  console.log(filesToVoice);
-  return filesToVoice;
+export interface IUser {
+  _id: ObjectId;
+  name: string;
+  words: IWord[];
 }
 
-export default class User {
-  constructor(public name: string) {}
-  async findWordsByNames(words: string[]): Promise<Word[]> {
-    return await getSentence(words);
-  }
-}
+export const UserSchema = new mongoose.Schema({
+  name: {
+    type: String,
+    required: true,
+    index: true,
+  },
+
+  words: {
+    type: [{ type: Schema.Types.ObjectId, ref: "Word" }],
+    required: true,
+  },
+});
+
+export const UserModel = mongoose.model<IUser & mongoose.Document>(
+  "User",
+  UserSchema
+);
+
+export const DefaultUser = new Promise(
+  (resolve: (user: IUser) => void, reject) =>
+    UserModel.findOne({ name: "demo" }, (err: CallbackError, obj: IUser) => {
+      console.log("Default user get");
+      if (err) reject(err);
+      else resolve(obj);
+    })
+);
