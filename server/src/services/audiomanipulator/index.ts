@@ -73,22 +73,20 @@ class AudioManipulatorService {
       wordInfo.map(async (wordObj) => {
         const outputFile = await this.tempFile(".mp3");
 
-        await new Promise<void>((success, fail) =>
-          ffmpeg.ffprobe(allVoiceFile, (_err, _metaData) => {
-            const startingTime = wordObj.startSecs;
-            const clipDuration = wordObj.endSecs - wordObj.startSecs;
-            console.log(`Start: ${startingTime}, Duration: ${clipDuration}`);
-            ffmpeg()
-              .input(allVoiceFile)
-              .inputOptions([`-ss ${startingTime}`])
-              .outputOptions([`-t ${clipDuration}`])
-              .toFormat("mp3")
-              .output(outputFile)
-              .on("end", () => success())
-              .on("error", (err) => fail(err))
-              .run();
-          })
-        );
+        await new Promise<void>((success, fail) => {
+          const startingTime = wordObj.startSecs;
+          const clipDuration = wordObj.endSecs - wordObj.startSecs;
+          console.log(`Start: ${startingTime}, Duration: ${clipDuration}`);
+          ffmpeg()
+            .input(allVoiceFile)
+            .inputOptions([`-ss ${startingTime}`])
+            .outputOptions([`-t ${clipDuration}`])
+            .toFormat("mp3")
+            .output(outputFile)
+            .on("end", () => success())
+            .on("error", (err) => fail(err))
+            .run();
+        });
 
         return { word: wordObj.word, path: outputFile };
       })
