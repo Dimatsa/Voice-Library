@@ -1,2 +1,8 @@
 runtime: nodejs14
 entrypoint: npm run serve
+
+handlers:
+  - url: /.*
+    secure: always
+    redirect_http_response_code: 301
+    script: auto
